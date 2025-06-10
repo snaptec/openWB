@@ -13,7 +13,9 @@ ipadr = str(sys.argv[2])
 uberschuss = int(sys.argv[3])
 navvers = str(sys.argv[4])
 pvwatt = int(sys.argv[5])
-forcesend = int(sys.argv[6])
+uberschussvz = str(sys.argv[6])
+maxpower = int(sys.argv[7])
+forcesend = int(sys.argv[8])
 # forcesend = 0 default time period applies
 # forcesend = 1 default overwritten send now
 # forcesend = 9 default overwritten no send
@@ -37,12 +39,28 @@ if count5 > 6:
     count5 = 0
 with open(file_stringcount5, 'w') as f:
     f.write(str(count5))
+# aktuelle Leistung lesen
+client = ModbusTcpClient(ipadr, port=502)
+#  test
+#  start = 3501
+#  navvers = "2"
+#  prod
+start = 4122
+if navvers == "2":
+    rr = client.read_input_registers(start, 2, unit=1)
+else:
+    rr = client.read_holding_registers(start, 2, unit=1)
+raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
+lkw = float(struct.unpack('>f', raw)[0])
+aktpower = int(lkw*1000)
+modbuswrite = 0
+neupower = 0
+# pv modus
+pvmodus = 0
+if os.path.isfile(file_stringpv):
+    with open(file_stringpv, 'r') as f:
+        pvmodus = int(f.read())
 if count5 == 0:
-    # pv modus
-    pvmodus = 0
-    if os.path.isfile(file_stringpv):
-        with open(file_stringpv, 'r') as f:
-            pvmodus = int(f.read())
     # log counter
     count1 = 999
     if os.path.isfile(file_stringcount):
@@ -53,30 +71,28 @@ if count5 == 0:
         count1 = 0
     with open(file_stringcount, 'w') as f:
         f.write(str(count1))
-    # aktuelle Leistung lesen
-    client = ModbusTcpClient(ipadr, port=502)
-    #  test
-    #  start = 3501
-    #  navvers = "2"
-    #  prod
-    start = 4122
-    if navvers == "2":
-        rr = client.read_input_registers(start, 2, unit=1)
-    else:
-        rr = client.read_holding_registers(start, 2, unit=1)
-    raw = struct.pack('>HH', rr.getRegister(1), rr.getRegister(0))
-    lkw = float(struct.unpack('>f', raw)[0])
-    aktpower = int(lkw*1000)
     # logik nur schicken bei pvmodus
-    modbuswrite = 0
     if pvmodus == 1:
         modbuswrite = 1
-    # Nur positiven Uberschuss schicken, nicht aktuelle Leistung
     neupower = uberschuss
-    if neupower < 0:
-        neupower = 0
-    if neupower > 40000:
-        neupower = 40000
+    # uberschuss begrenzung ?
+    if (maxpower > 0):
+        neupower = maxpower - aktpower
+        # maximaler überschuss berechnet ?
+        if (neupower > uberschuss):
+            neupower = uberschuss
+    if (uberschussvz == 'UZ'):
+        # <option value="UP" data-option="UP">Überschuss als positive Zahl übertragen, Bezug negativ</option>
+        # <option value="UZ" data-option="UZ">Überschuss als positive Zahl übertragen, Bezug als 0</option>
+        if neupower < 0:
+            neupower = 0
+        if neupower > 65535:
+            neupower = 65535
+    else:
+        if neupower < -32767:
+            neupower = -32767
+        if neupower > 32767:
+            neupower = 32767
     # wurde IDM gerade ausgeschaltet ?    (pvmodus == 99 ?)
     # dann 0 schicken wenn kein pvmodus mehr
     # und pv modus ausschalten
@@ -101,19 +117,22 @@ if count5 == 0:
     pvwnew = builder.to_registers()
     # json return power = aktuelle Leistungsaufnahme in Watt,
     # on = 1 pvmodus, powerc = counter in kwh
-    answer = '{"power":' + str(aktpower) + ',"powerc":0'
-    answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(neupower)
-    answer += ',"on":' + str(pvmodus) + '}'
-    writeret(answer, devicenumber)
     if count1 < 3:
         log.info(" %d ipadr %s ueberschuss %6d Akt Leistung %6d Pv %6d"
                  % (devicenumber, ipadr, uberschuss, aktpower, pvwatt))
-        log.info(" %d ipadr %s ueberschuss %6d pvmodus %1d modbusw %1d"
+        log.info(" %d ipadr %s ueberschuss send %6d pvmodus %1d modbusw %1d"
                  % (devicenumber, ipadr, neupower, pvmodus, modbuswrite))
     # modbus write
     if modbuswrite == 1:
         client.write_registers(74, regnew, unit=1)
-        client.write_registers(78, pvwnew, unit=1)
         if count1 < 3:
             log.info("devicenr %d ipadr %s device written by modbus " %
                      (devicenumber, ipadr))
+    client.write_registers(78, pvwnew, unit=1)
+else:
+    if pvmodus == 99:
+        pvmodus = 0
+answer = '{"power":' + str(aktpower) + ',"powerc":0'
+answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(neupower)
+answer += ',"on":' + str(pvmodus) + '}'
+writeret(answer, devicenumber)

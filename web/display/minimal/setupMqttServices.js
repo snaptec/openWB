@@ -17,13 +17,18 @@ var topicsToSubscribe = [
 	["openWB/lp/1/boolPlugStat", 1],
 	["openWB/lp/1/boolChargeStat", 1],
 	["openWB/lp/1/ChargePointEnabled", 1],
-	["openWB/lp/2/W", 1],
-	["openWB/lp/2/%Soc", 1],
-	["openWB/lp/2/boolSocConfigured"],
-	["openWB/lp/2/boolPlugStat", 1],
-	["openWB/lp/2/ChargePointEnabled", 1],
-	["openWB/lp/2/boolChargeStat", 1],
 ];
+
+if (lastmanagementold == 1) {
+	topicsToSubscribe.push(
+		["openWB/lp/2/W", 1],
+		["openWB/lp/2/%Soc", 1],
+		["openWB/lp/2/boolSocConfigured"],
+		["openWB/lp/2/boolPlugStat", 1],
+		["openWB/lp/2/ChargePointEnabled", 1],
+		["openWB/lp/2/boolChargeStat", 1],
+	);
+}
 
 // holds number of topics flagged 1 initially
 var countTopicsNotForPreloader = topicsToSubscribe.filter(row => row[1] === 1).length;

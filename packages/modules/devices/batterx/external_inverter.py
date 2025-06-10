@@ -19,7 +19,7 @@ class BatterXExternalInverter:
         self.component_info = ComponentInfo.from_component_config(self.component_config)
 
     def get_power(self, resp: Dict) -> float:
-        return resp["2913"]["0"] * -1
+        return resp["2913"]["3"] * -1
 
     def update(self, resp: Dict) -> None:
         power = self.get_power(resp)

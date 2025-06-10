@@ -1,10 +1,24 @@
 #!/bin/bash
-OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
-RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
-MODULEDIR=$(cd "$(dirname "$0")" && pwd)
+
+# -- start user pi enforcement
+# normally the soc module runs as user pi
+# when LP Configuration is stored, it is run as user www-data
+# This leads to various permission problems
+# if actual user is not pi, this restarts the script as user pi
+usr=`id -nu`
+if [ "$usr" != "pi" ]
+then
+	sudo -u pi -c bash "$0 $*"
+	exit $?
+fi
+# -- ending user pi enforcement
+
+export OPENWBBASEDIR=$(cd "$(dirname "$0")/../../" && pwd)
+export RAMDISKDIR="$OPENWBBASEDIR/ramdisk"
+export MODULEDIR=$(cd "$(dirname "$0")" && pwd)
 LOGFILE="$RAMDISKDIR/soc.log"
 DMOD="EVSOC"
-CHARGEPOINT=$1
+export CHARGEPOINT=$1
 
 # check if config file is already in env
 if [[ -z "$debug" ]]; then
@@ -31,6 +45,7 @@ case $CHARGEPOINT in
 		user=$i3usernames1
 		pass=$i3passworts1
 		vin=$i3vins1
+		captcha_token=$i3captcha_tokens1
 		;;
 	*)
 		# defaults to first charge point for backward compatibility
@@ -47,8 +62,30 @@ case $CHARGEPOINT in
 		user=$i3username
 		pass=$i3passwort
 		vin=$i3vin
+		captcha_token=$i3captcha_token
 		;;
 esac
+
+# make sure folder data/i3 exists in openwb home folder
+# can be executed by pi or www-data so we have to use sudo 
+prepare_i3DataFolder(){
+	dataFolder="${OPENWBBASEDIR}/data"
+	i3Folder="${dataFolder}/i3"
+	if [ ! -d $i3Folder ]
+	then
+		sudo mkdir -p $i3Folder
+		f=soc_i3_cp1.json
+		if [ -f $RAMDISKDIR/$f -a ! -f $i3Folder/$f ]; then
+			cp $RAMDISKDIR/$f $i3Folder
+		fi
+		f=soc_i3_cp2.json
+		if [ -f $RAMDISKDIR/$f -a ! -f $i3Folder/$f ]; then
+			cp $RAMDISKDIR/$f $i3Folder
+		fi
+	fi
+	sudo chown -R pi:pi $dataFolder
+	sudo chmod 0777 $i3Folder
+}
 
 incrementTimer(){
 	case $dspeed in
@@ -73,12 +110,13 @@ incrementTimer(){
 	echo $soctimer > "$soctimerfile"
 }
 
+prepare_i3DataFolder
 soctimer=$(<"$soctimerfile")
-openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: timer = $soctimer"
+openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: timer = $soctimer"
 cd $MODULEDIR
 if (( soctimer < (6 * intervall) )); then
 	if(( soccalc < 1 )); then
-		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
+		openwbDebugLog ${DMOD} 2 "Lp$CHARGEPOINT: Nothing to do yet. Incrementing timer."
 	else
 		ARGS='{'
 		ARGS+='"socfile": "'"$socfile"'", '
@@ -91,7 +129,7 @@ if (( soctimer < (6 * intervall) )); then
 
 		ARGSB64=$(echo -n $ARGS | base64 --wrap=0)
 
-		sudo python3 "$MODULEDIR/manual.py" "$ARGSB64" &>> $LOGFILE &
+		python3 "$MODULEDIR/manual.py" "$ARGSB64" &>> $LOGFILE &
 
 		soclevel=$(<"$socfile")
 		openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC: $soclevel"
@@ -108,12 +146,13 @@ else
 	ARGS+='"socfile": "'"$socfile"'", '
 	ARGS+='"meterfile": "'"$meterfile"'", '
 	ARGS+='"statefile": "'"$statefile"'", '
+	ARGS+='"captcha_token": "'"$captcha_token"'", '
 	ARGS+='"debugLevel": "'"$DEBUGLEVEL"'"'
 	ARGS+='}'
 
 	ARGSB64=$(echo -n $ARGS | base64 --wrap=0)
 
-	sudo python3 "$MODULEDIR/i3soc.py" "$ARGSB64" &>> $LOGFILE &
+	python3 "$MODULEDIR/i3soc.py" "$ARGSB64" &>> $LOGFILE &
 
 	soclevel=$(<"$socfile")
 	openwbDebugLog ${DMOD} 1 "Lp$CHARGEPOINT: SoC: $soclevel"

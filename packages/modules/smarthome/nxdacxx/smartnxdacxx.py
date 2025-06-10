@@ -44,7 +44,8 @@ class Snxdacxx(Sbase):
                         str(self.devuberschuss),
                         str(self._device_nxdacxxueb), str(forcesend),
                         str(self._device_dacport),
-                        str(self._device_nxdacxxtype)]
+                        str(self._device_nxdacxxtype),
+                        str(self.newwatt)]
         try:
             self.callpro(argumentList)
             self.answer = self.readret()

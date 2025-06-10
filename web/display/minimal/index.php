@@ -45,6 +45,13 @@
 				list($key, $value) = explode("=", $line, 2);
 				${$key."old"} = trim( $value, " '\t\n\r\0\x0B" ); // remove all garbage and single quotes
 			}
+			if ($lastmanagementold == "1") {
+				// filter local connections
+				$valid_evsecon = ["modbusevse", "daemon", "ipevse", "dac"];
+				if (!in_array($evsecons1old, $valid_evsecon)) {
+					$lastmanagementold = "0";
+				}
+			}
 		?>
 
 		<script src="display/minimal/gauge.js?ver=20230106"></script>
@@ -190,7 +197,7 @@
 					// functions for processing messages
 					'display/minimal/processAllMqttMsg.js?ver=20230204',
 					// functions performing mqtt and start mqtt-service
-					'display/minimal/setupMqttServices.js?ver=20221229',
+					'display/minimal/setupMqttServices.js?ver=20230818',
 				];
 
 				scriptsToLoad.forEach(function(src) {

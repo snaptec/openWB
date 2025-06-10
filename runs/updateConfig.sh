@@ -329,6 +329,12 @@ updateConfig(){
 	if ! grep -Fq "i3vin=" $ConfigFile; then
 		echo "i3vin=VIN" >> $ConfigFile
 	fi
+	if ! grep -Fq "i3captcha_token=" $ConfigFile; then
+		echo "i3captcha_token=''" >> $ConfigFile
+	fi
+	if ! grep -Fq "i3captcha_tokens1=" $ConfigFile; then
+		echo "i3captcha_tokens1=''" >> $ConfigFile
+	fi
 	if ! grep -Fq "i3_soccalclp1=" $ConfigFile; then
 		echo "i3_soccalclp1=0" >> $ConfigFile
 	fi
@@ -581,11 +587,11 @@ updateConfig(){
 	if ! grep -Fq "soc_id_intervall=" $ConfigFile; then
 		echo "soc_id_intervall=120" >> $ConfigFile
 	fi
-	if ! grep -Fq "soc_smarteq_intervallladen=" $ConfigFile; then
-		echo "soc_smarteq_intervallladen=20" >> $ConfigFile
+	if ! grep -Fq "soc_ovms_intervallladen=" $ConfigFile; then
+		echo "soc_ovms_intervallladen=20" >> $ConfigFile
 	fi
-	if ! grep -Fq "soc_smarteq_intervall=" $ConfigFile; then
-		echo "soc_smarteq_intervall=120" >> $ConfigFile
+	if ! grep -Fq "soc_ovms_intervall=" $ConfigFile; then
+		echo "soc_ovms_intervall=120" >> $ConfigFile
 	fi
 	if ! grep -Fq "releasetrain=" $ConfigFile; then
 		echo "releasetrain=stable" >> $ConfigFile
@@ -2106,20 +2112,35 @@ updateConfig(){
 	if ! grep -Fq "soc_id_vin=" $ConfigFile; then
 		echo "soc_id_vin=VIN" >> $ConfigFile
 	fi
-	if ! grep -Fq "soc_smarteq_username=" $ConfigFile; then
-		echo "soc_smarteq_username=User" >> $ConfigFile
+	if ! grep -Fq "soc_ovms_server=" $ConfigFile; then
+		echo "soc_ovms_server=https://ovms.dexters-web.de:6869" >> $ConfigFile
 	fi
-	if ! grep -Fq "soc_smarteq_passwort=" $ConfigFile; then
-		echo "soc_smarteq_passwort=''" >> $ConfigFile
+	if ! grep -Fq "soc2server=" $ConfigFile; then
+		echo "soc2server=https://ovms.dexters-web.de:6869" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_ovms_username=" $ConfigFile; then
+		echo "soc_ovms_username=User" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc_ovms_passwort=" $ConfigFile; then
+		echo "soc_ovms_passwort=''" >> $ConfigFile
 	else
-		sed -i "/soc_smarteq_passwort='/b; s/^soc_smarteq_passwort=\(.*\)/soc_smarteq_passwort=\'\1\'/g" $ConfigFile
+		sed -i "/soc_ovms_passwort='/b; s/^soc_ovms_passwort=\(.*\)/soc_ovms_passwort=\'\1\'/g" $ConfigFile
 	fi
-	if ! grep -Fq "soc_smarteq_vin=" $ConfigFile; then
-		echo "soc_smarteq_vin=VIN" >> $ConfigFile
+	if ! grep -Fq "soc_ovms_vehicleid=" $ConfigFile; then
+		echo "soc_ovms_vehicleid=vehicleid" >> $ConfigFile
 	fi
 	if ! grep -Fq "soc2vin=" $ConfigFile; then
 		echo "soc2vin=" >> $ConfigFile
 		echo "soc2intervall=60" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc2vehicleid=" $ConfigFile; then
+		echo "soc2vehicleid=" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc2intervall=" $ConfigFile; then
+		echo "soc2intervall=60" >> $ConfigFile
+	fi
+	if ! grep -Fq "soc2intervallladen=" $ConfigFile; then
+		echo "soc2intervallladen=10" >> $ConfigFile
 	fi
 	if ! grep -Fq "wirkungsgradlp1=" $ConfigFile; then
 		echo "wirkungsgradlp1=90" >> $ConfigFile
@@ -2358,5 +2379,32 @@ updateConfig(){
 			fi
 		fi
 	fi
+	echo "remove soc_smarteq entries from Config file"
+	cp $ConfigFile $ConfigFile.tmp
+	# check for socmodul1=soc_smarteqlp2
+	ism2=`grep "socmodul1=soc_smarteqlp2" $ConfigFile.tmp | wc -l | awk '{print $1}'`
+	if [ $ism2 -ne 0 ]
+	then
+		echo "soc_smarteq found configured as socmodul1 - cleanup soc2 entries"
+		sed -e "
+			s/soc2user=.*$/soc2user=demo@demo.de/
+			s/soc2pass=.*$/soc2pass=\'\'/
+			s/soc2pin=.*$/soc2pin=pin/
+			s/soc2vin=.*$/soc2vin=/
+			s/soc2intervall=.*$/soc2intervall=60/
+			s/soc2intervallladen=.*$/soc2intervallladen=10/
+		" $ConfigFile.tmp > $ConfigFile.tmp.out
+		cp $ConfigFile.tmp.out $ConfigFile.tmp
+	fi
+	# modify configured smarteq modules to none
+	sed -e '
+		s/socmodul=soc_smarteq/socmodul=none/
+		s/socmodul1=soc_smarteqlp2/socmodul1=none/
+		/soc2pint=/d
+		/soc_smarteq/d
+	' $ConfigFile.tmp > $ConfigFile.tmp.out
+	cp $ConfigFile.tmp.out $ConfigFile
+	rm $ConfigFile.tmp $ConfigFile.tmp.out
+
 	echo "Config file Update done."
 }

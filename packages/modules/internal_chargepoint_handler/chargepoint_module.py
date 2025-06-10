@@ -34,12 +34,14 @@ class ChargepointModule(AbstractChargepoint):
 
     def get_values(self, phase_switch_cp_active: bool) -> Tuple[ChargepointState, float]:
         try:
-            _, power = self.__client.meter_client.get_power()
+            powers, power = self.__client.meter_client.get_power()
             if power < self.PLUG_STANDBY_POWER_THRESHOLD:
                 power = 0
             voltages = self.__client.meter_client.get_voltages()
             currents = self.__client.meter_client.get_currents()
             imported = self.__client.meter_client.get_imported()
+            power_factors = self.__client.meter_client.get_power_factors()
+            frequency = self.__client.meter_client.get_frequency()
             phases_in_use = sum(1 for current in currents if current > 3)
 
             time.sleep(0.1)
@@ -63,12 +65,13 @@ class ChargepointModule(AbstractChargepoint):
                 currents=currents,
                 imported=imported,
                 exported=0,
-                # powers=powers,
+                powers=powers,
                 voltages=voltages,
-                # frequency=frequency,
+                frequency=frequency,
                 plug_state=plug_state,
                 charge_state=charge_state,
                 phases_in_use=phases_in_use,
+                power_factors=power_factors,
                 rfid=rfid
             )
         except Exception as e:

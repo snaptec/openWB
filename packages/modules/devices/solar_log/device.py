@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import json
 import logging
-from typing import List, Optional, Union
+from typing import Iterable, List, Optional, Union
 
 from helpermodules.cli import run_using_positional_cli_args
 from modules.common.abstract_device import DeviceDescriptor
@@ -21,7 +21,7 @@ def create_device(device_config: SolarLog):
     def create_inverter_component(component_config: SolarLogInverterSetup):
         return SolarLogInverter(device_config.id, component_config)
 
-    def update_components(components: Union[SolarLogCounter, SolarLogInverter]):
+    def update_components(components: Iterable[Union[SolarLogCounter, SolarLogInverter]]):
         response = req.get_http_session().post('http://'+device_config.ip_adress+'/getjp',
                                                data=json.dumps({"801": {"170": None}}), timeout=5).json()
         for component in components:

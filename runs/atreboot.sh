@@ -32,6 +32,14 @@ at_reboot() {
 		sudo kill "$$"
 	) &
 
+	# check for outdated sources.list (Stretch only)
+	if grep -q -e "^deb http://raspbian.raspberrypi.org/raspbian/ stretch" /etc/apt/sources.list; then
+		echo "sources.list outdated! upgrading..."
+		sudo sed -i "s/^deb http:\/\/raspbian.raspberrypi.org\/raspbian\/ stretch/deb http:\/\/legacy.raspbian.org\/raspbian\/ stretch/g" /etc/apt/sources.list
+	else
+		echo "sources.list already updated"
+	fi
+
 	# read openwb.conf
 	echo "loading config"
 	. "$OPENWBBASEDIR/loadconfig.sh"
@@ -284,20 +292,6 @@ at_reboot() {
 		if [ ! -L "$VWIDMODULEDIR/secrets.py" ]; then
 			echo 'soc_vwid: enable local python3 secrets.py...'
 			ln -s "$VWIDMODULEDIR/_secrets.py" "$VWIDMODULEDIR/secrets.py"
-		fi
-	fi
-	#Prepare for secrets used in soc module soc_smarteq in Python
-	SMARTEQMODULEDIR="$OPENWBBASEDIR/modules/soc_smarteq"
-	if python3 -c "import secrets" &>/dev/null; then
-		echo 'soc_smarteq: python3 secrets installed...'
-		if [ -L "$SMARTEQMODULEDIR/secrets.py" ]; then
-			echo 'soc_smarteq: remove local python3 secrets.py...'
-			rm "$SMARTEQMODULEDIR/secrets.py"
-		fi
-	else
-		if [ ! -L "$SMARTEQMODULEDIR/secrets.py" ]; then
-			echo 'soc_smarteq: enable local python3 secrets.py...'
-			ln -s "$SMARTEQMODULEDIR/_secrets.py" "$SMARTEQMODULEDIR/secrets.py"
 		fi
 	fi
 	# update outdated urllib3 for Tesla Powerwall

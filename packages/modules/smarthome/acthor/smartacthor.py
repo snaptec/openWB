@@ -44,7 +44,8 @@ class Sacthor(Sbase):
         argumentList = ['python3', self._prefixpy + 'acthor/watt.py',
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss), self._device_acthortype,
-                        self._device_acthorpower, str(forcesend)]
+                        self._device_acthorpower, str(forcesend),
+                        str(self.newwatt), str(self._oldmeasuretype1)]
         try:
             self.callpro(argumentList)
             self.answer = self.readret()

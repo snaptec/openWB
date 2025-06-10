@@ -12,6 +12,7 @@ maxpower = int(sys.argv[4])
 forcesend = int(sys.argv[5])
 port = int(sys.argv[6])
 dactyp = int(sys.argv[7])
+aktpoweralt = int(sys.argv[8])
 initlog("DAC", devicenumber)
 log = logging.getLogger("DAC")
 # forcesend = 0 default time period applies
@@ -36,12 +37,15 @@ if count5 > 3:
 with open(file_stringcount5, 'w') as f:
     f.write(str(count5))
 modbuswrite = 0
-neupower = uberschuss
+if (dactyp == 3) or (dactyp == 1):
+    neupower = uberschuss + aktpoweralt
+else:
+    neupower = uberschuss
 if neupower < 0:
     neupower = 0
 if neupower > maxpower:
     neupower = maxpower
-volt = 0
+ausgabe = 0
 pvmodus = 0
 if os.path.isfile(file_stringpv):
     with open(file_stringpv, 'r') as f:
@@ -71,38 +75,44 @@ if count5 == 0:
     if count1 > 80:
         count1 = 0
     if count1 < 3:
-        helpstr = 'devicenr %d ipadr %s ueberschuss %6d port %4d'
+        helpstr = 'devicenr %d ipadr %s ueberschuss %6d aktpoweralt %6d port %4d'
         helpstr += ' maxueberschuss %6d pvmodus %1d modbuswrite %1d'
-        log.info(helpstr % (devicenumber, ipadr, uberschuss,
+        log.info(helpstr % (devicenumber, ipadr, uberschuss, aktpoweralt,
                  port, maxpower, pvmodus, modbuswrite))
     # modbus write
     if modbuswrite == 1:
         client = ModbusTcpClient(ipadr, port=port)
         if dactyp == 0:
             # 10 Volts are 1000
-            volt = int((neupower * 1000) / maxpower)
-            rq = client.write_register(1, volt, unit=1)
+            ausgabe = int((neupower * 1000) / maxpower)
+            rq = client.write_register(1, ausgabe, unit=1)
         elif dactyp == 1:
-            # 10 volts are 4000
-            volt = int((neupower * 4000) / maxpower)
-            rq = client.write_register(0x01f4, volt, unit=1)
+            # 10 Volts are 4000
+            ausgabe = int((neupower * 4000) / maxpower)
+            rq = client.write_register(0x01f4, ausgabe, unit=1)
         elif dactyp == 2:
-            volt = int((neupower * 4095) / maxpower)
-            if volt < 370:
-                volt = 370
+            ausgabe = int((neupower * 4095) / maxpower)
+            if ausgabe < 370:
+                ausgabe = 370
             #  ausgabe nicht kleiner 0,9V sonst Leistungsregelung der WP aus
-            rq = client.write_register(0, volt, unit=1)
+            rq = client.write_register(0, ausgabe, unit=1)
+        elif dactyp == 3:
+            ausgabe = int(((neupower * (4095-820)) / maxpower)+820)
+            if ausgabe <= 820:
+                ausgabe = 0
+            #  ausgabe nicht kleiner 4ma sonst Leistungsregelung der WP aus
+            rq = client.write_register(0x01f4, ausgabe, unit=1)
         else:
             pass
         if count1 < 3:
-            log.info('devicenr %d ipadr %s Volt %6d dactyp %d written by modbus ' %
-                     (devicenumber, ipadr, volt, dactyp))
+            log.info('devicenr %d ipadr %s Modbuswert %6d dactyp %d written by modbus ' %
+                     (devicenumber, ipadr, ausgabe, dactyp))
     with open(file_stringcount, 'w') as f:
         f.write(str(count1))
 else:
     if pvmodus == 99:
         pvmodus = 0
 answer = '{"power":' + str(aktpower) + ',"powerc":' + str(powerc)
-answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(volt)
+answer += ',"send":' + str(modbuswrite) + ',"sendpower":' + str(ausgabe)
 answer += ',"on":' + str(pvmodus) + '}'
 writeret(answer, devicenumber)

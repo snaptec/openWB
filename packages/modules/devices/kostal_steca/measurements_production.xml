@@ -1,0 +1,20 @@
+<root>
+	<Device Name="PIKO 3.0-1 MP plus" Type="Inverter" Platform="Net16" HmiPlatform="HMI17" NominalPower="3000" UserPowerLimit="nan" CountryPowerLimit="nan" Serial="xyz" OEMSerial="xyz" BusAddress="1" NetBiosName="INVxyz" WebPortal="PIKO Solar Portal" ManufacturerURL="kostal-solar-electric.com" IpAddress="192.xxx.xxx.xx" DateTime="2022-04-07T08:26:12" MilliSeconds="761">
+		<Measurements>
+			<Measurement Value="234.2" Unit="V" Type="AC_Voltage"/>
+			<Measurement Value="0.566" Unit="A" Type="AC_Current"/>
+			<Measurement Value="132.8" Unit="W" Type="AC_Power"/>
+			<Measurement Value="131.3" Unit="W" Type="AC_Power_fast"/>
+			<Measurement Value="50.021" Unit="Hz" Type="AC_Frequency"/>
+			<Measurement Value="416.2" Unit="V" Type="DC_Voltage"/>
+			<Measurement Value="0.377" Unit="A" Type="DC_Current"/>
+			<Measurement Value="27.5" Unit="°C" Type="Temp"/>
+			<Measurement Value="415.8" Unit="V" Type="LINK_Voltage"/>
+			<Measurement Unit="W" Type="GridPower"/>
+			<Measurement Unit="W" Type="GridConsumedPower"/>
+			<Measurement Unit="W" Type="GridInjectedPower"/>
+			<Measurement Unit="W" Type="OwnConsumedPower"/>
+			<Measurement Value="100.0" Unit="%" Type="Derating"/>
+		</Measurements>
+	</Device>
+</root>

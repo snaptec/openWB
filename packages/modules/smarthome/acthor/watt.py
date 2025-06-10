@@ -14,6 +14,8 @@ uberschuss = int(sys.argv[3])
 atype = str(sys.argv[4])
 instpower = int(sys.argv[5])
 forcesend = int(sys.argv[6])
+aktpoweralt = int(sys.argv[7])
+measuretyp = str(sys.argv[8])
 # forcesend = 0 default time period applies
 # forcesend = 1 default overwritten send now
 # forcesend = 9 default overwritten no send
@@ -42,13 +44,23 @@ neupower = 0
 if instpower == 0:
     instpower = 1000
 cap = 9000
-if atype == "9s18":
+if atype == "9s45":
+    faktor = 45000/instpower
+    cap = 45000
+elif atype == "9s27":
+    faktor = 27000/instpower
+    cap = 27000
+elif atype == "9s18":
     faktor = 18000/instpower
     cap = 18000
 elif atype == "9s":
     faktor = 9000/instpower
 elif atype == "M3":
     faktor = 6000/instpower
+elif atype == "E2M1":
+    faktor = 3500/instpower
+elif atype == "E2M3":
+    faktor = 6500/instpower
 else:
     faktor = 3000/instpower
 pvmodus = 0
@@ -67,10 +79,17 @@ resp = client.read_holding_registers(start, 35, unit=1)
 value1 = resp.registers[0]
 all = format(value1, '04x')
 aktpower = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+# sofern externe Messung wird dieser Wert genommen
+if measuretyp == 'empty':
+    aktpower = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+else:
+    aktpower = aktpoweralt
 # Wassertemperatur lesen
 # Temp0 Warmwasser 1001
 # Temp1 1030 <- Optional wenn 0, nicht angeschlossen dann ersetzt durch 300 (keine Anzeige)
 # Temp2 1031 <- Optional wenn 0, nicht angeschlossen dann ersetzt durch 300 (keine Anzeige)
+# elwa2 hat nur zwei temp Fuehler
+# nicht drei
 value1 = resp.registers[1]
 all = format(value1, '04x')
 temp0int = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
@@ -81,10 +100,13 @@ temp1int = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
 temp1 = temp1int / 10
 if temp1 == 0:
     temp1 = 300
-value1 = resp.registers[31]
-all = format(value1, '04x')
-temp2int = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
-temp2 = temp2int / 10
+if (atype == "E2M3" or atype == "E2M1"):
+    temp2 = 300.0
+else:
+    value1 = resp.registers[31]
+    all = format(value1, '04x')
+    temp2int = int(struct.unpack('>h', codecs.decode(all, 'hex'))[0])
+    temp2 = temp2int / 10
 if temp2 == 0:
     temp2 = 300
 if count5 == 0:
@@ -103,9 +125,11 @@ if count5 == 0:
         neupowertarget = int((uberschuss + aktpower) * faktor)
     if neupowertarget < 0:
         neupowertarget = 0
+    if instpower > cap:
+        cap = instpower
     if neupowertarget > int(cap * faktor):
         neupowertarget = int(cap * faktor)
-    # status nach handbuch Thor
+    # status nach handbuch Thor/elwa2
     # 0.. Aus
     # 1-8 Geraetestart
     # 9 Betrieb
@@ -131,8 +155,8 @@ if count5 == 0:
         f.write(str(count1))
     # mehr log schreiben
     if count1 < 3:
-        log.info(" watt devicenr %d ipadr %s ueberschuss %6d Akt Leistung  %6d Status %2d" %
-                 (devicenumber, ipadr, uberschuss, aktpower, status))
+        log.info(" watt devicenr %d ipadr %s ueberschuss %6d Akt Leistung  %6d Status %2d Externe Messung %s" %
+                 (devicenumber, ipadr, uberschuss, aktpower, status, measuretyp))
         log.info(" watt devicenr %d ipadr %s Neu Leistung %6d pvmodus %1d modbuswrite %1d" %
                  (devicenumber, ipadr, neupower, pvmodus, modbuswrite))
         log.info(" watt devicenr %d ipadr %s type %s inst. Leistung %6d Skalierung %.2f" %

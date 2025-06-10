@@ -76,6 +76,11 @@ class UpdateValues:
                 self._pub_values_to_1_9(key, value)
                 self._pub_values_to_2(key, value)
             self.old_counter_state = counter_state
+        for topic, value in [
+                    ("fault_state", 0),
+                    ("fault_str", "Keine Fehler.")
+                ]:
+            self._pub_values_to_2(topic, value)
 
     def _pub_values_to_1_9(self, key: str, value) -> None:
         def pub_value(topic: str, value):
@@ -84,7 +89,7 @@ class UpdateValues:
             if self.parent_wb != "localhost":
                 pub_single("openWB/lp/"+self.cp_num_str+"/"+topic,
                            payload=str(value), hostname=self.parent_wb, no_json=True)
-        topic = self.MAP_KEY_TO_OLD_TOPIC[key]
+        topic = self.MAP_KEY_TO_OLD_TOPIC.get(key)
         rounding = get_rounding_function_by_digits(2)
         if topic is not None:
             if isinstance(topic, List):

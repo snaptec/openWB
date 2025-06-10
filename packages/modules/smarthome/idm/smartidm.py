@@ -11,6 +11,8 @@ class Sidm(Sbase):
         super().__init__()
         self._device_idmnav = '2'
         self.device_nummer = 0
+        self._device_idmueb = 'UZ'
+        self._device_maxueb = 0
 
     def updatepar(self, input_param: Dict[str, str]) -> None:
         super().updatepar(input_param)
@@ -18,10 +20,18 @@ class Sidm(Sbase):
         self.device_nummer = int(self._smart_paramadd.get('device_nummer',
                                                           '0'))
         for key, value in self._smart_paramadd.items():
+            try:
+                valueint = int(value)
+            except Exception:
+                valueint = 0
             if (key == 'device_nummer'):
                 pass
             elif (key == 'device_idmnav'):
                 self._device_idmnav = value
+            elif (key == 'device_idmueb'):
+                self._device_idmueb = value
+            elif (key == 'device_maxueb'):
+                self._device_maxueb = valueint
             else:
                 log.info("(" + str(self.device_nummer) + ") " +
                          " IDM überlesen " + key +
@@ -33,7 +43,10 @@ class Sidm(Sbase):
         argumentList = ['python3', self._prefixpy + 'idm/watt.py',
                         str(self.device_nummer), str(self._device_ip),
                         str(self.devuberschuss), str(self._device_idmnav),
-                        str(self.pvwatt), str(forcesend)]
+                        str(self.pvwatt),
+                        str(self._device_idmueb),
+                        str(self._device_maxueb),
+                        str(forcesend)]
         try:
             self.callpro(argumentList)
             self.answer = self.readret()

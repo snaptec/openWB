@@ -2,10 +2,11 @@
 from typing import List, Tuple
 
 from modules.common import modbus
+from modules.common.abstract_counter import AbstractCounter
 from modules.common.modbus import ModbusDataType
 
 
-class Sdm:
+class Sdm(AbstractCounter):
     def __init__(self, modbus_id: int, client: modbus.ModbusTcpClient_) -> None:
         self.client = client
         self.id = modbus_id

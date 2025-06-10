@@ -763,7 +763,7 @@
 										<option <?php if($socmodulold == "soc_leaf") echo "selected" ?> value="soc_leaf">Nissan</option>
 										<option <?php if($socmodulold == "soc_psa") echo "selected" ?> value="soc_psa">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodulold == "soc_zoe") echo "selected" ?> value="soc_zoe">Renault Zoe (alt)</option>
-										<option <?php if($socmodulold == "soc_smarteq") echo "selected" ?> value="soc_smarteq">smart EQ</option>
+										<option <?php if($socmodulold == "soc_ovms") echo "selected" ?> value="soc_ovms">OVMS</option>
 										<option <?php if($socmodulold == "soc_tesla") echo "selected" ?> value="soc_tesla">Tesla</option>
 										<option <?php if($socmodulold == "soc_vag") echo "selected" ?> value="soc_vag">VAG</option>
 										<option <?php if($socmodulold == "soc_volvo") echo "selected" ?> value="soc_volvo">Volvo</option>
@@ -1295,52 +1295,62 @@
 									</div>
 								</div>
 							</div>
-							<div id="socmsmarteq" class="hide">
+							<div id="socmovms" class="hide">
 								<div class="form-group">
 									<div class="alert alert-info">
-										Für smart EQ Fahrzeuge. Es wird benötigt:<br>
-										- smart Control Account aktiv<br>
+										Für Fahrzeuge mit OVMS Modul. Es wird benötigt:<br>
+										- OVMS Account in z.B. dexters-web.de<br>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_smarteq_username" class="col-md-4 col-form-label">Benutzername</label>
+										<label for="soc_ovms_server" class="col-md-4 col-form-label">Server URL</label>
 										<div class="col">
-											<input class="form-control" type="email" name="soc_smarteq_username" id="soc_smarteq_username" value="<?php echo $soc_smarteq_usernameold ?>">
+											<input class="form-control" type="text" name="soc_ovms_server" id="soc_ovms_server" value="<?php echo $soc_ovms_serverold ?>">
 											<span class="form-text small">
-												Email Adresse des Logins.
+												URL des OVMS Servers incl. Port.<br>
+												z.B. https://ovms.dexters-web.de:6869<br>
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_smarteq_passwort" class="col-md-4 col-form-label">Passwort</label>
+										<label for="soc_ovms_username" class="col-md-4 col-form-label">Benutzername</label>
 										<div class="col">
-											<input class="form-control" type="password" name="soc_smarteq_passwort" id="soc_smarteq_passwort" value="<?php echo $soc_smarteq_passwortold ?>">
+											<input class="form-control" type="text" name="soc_ovms_username" id="soc_ovms_username" value="<?php echo $soc_ovms_usernameold ?>">
 											<span class="form-text small">
-												Password des Logins.
+												User Name des Accounts in z.B. dexters-web.de.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_smarteq_vin" class="col-md-4 col-form-label">VIN</label>
+										<label for="soc_ovms_passwort" class="col-md-4 col-form-label">Passwort</label>
 										<div class="col">
-											<input class="form-control" type="text" name="soc_smarteq_vin" id="soc_smarteq_vin" value="<?php echo $soc_smarteq_vinold ?>">
+											<input class="form-control" type="password" name="soc_ovms_passwort" id="soc_ovms_passwort" value="<?php echo $soc_ovms_passwortold ?>">
 											<span class="form-text small">
-												Vollständige VIN des Fahrzeugs.
+												Password des Accounts.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_smarteq_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<label for="soc_ovms_vehicleid" class="col-md-4 col-form-label">Vehicle Id</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_smarteq_intervall" id="soc_smarteq_intervall" value="<?php echo $soc_smarteq_intervallold ?>">
+											<input class="form-control" type="text" name="soc_ovms_vehicleid" id="soc_ovms_vehicleid" value="<?php echo $soc_ovms_vehicleidold ?>">
+											<span class="form-text small">
+												OVMS vehicleId des Fahrzeugs.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="soc_ovms_intervall" class="col-md-4 col-form-label">Abfrageintervall Standby</label>
+										<div class="col">
+											<input class="form-control" type="number" min="0" step="1" name="soc_ovms_intervall" id="soc_ovms_intervall" value="<?php echo $soc_ovms_intervallold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird, wenn nicht geladen wird. Angabe in Minuten.
 											</span>
 										</div>
 									</div>
 									<div class="form-row mb-1">
-										<label for="soc_smarteq_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
+										<label for="soc_ovms_intervallladen" class="col-md-4 col-form-label">Abfrageintervall Ladevorgang</label>
 										<div class="col">
-											<input class="form-control" type="number" min="0" step="1" name="soc_smarteq_intervallladen" id="soc_smarteq_intervallladen" value="<?php echo $soc_smarteq_intervallladenold ?>">
+											<input class="form-control" type="number" min="0" step="1" name="soc_ovms_intervallladen" id="soc_ovms_intervallladen" value="<?php echo $soc_ovms_intervallladenold ?>">
 											<span class="form-text small">
 												Wie oft das Fahrzeug abgefragt wird, wenn geladen wird. Angabe in Minuten.
 											</span>
@@ -1793,6 +1803,28 @@
 											<input class="form-control" type="text" name="i3vin" id="i3vin" value="<?php echo $i3vinold ?>">
 											<span class="form-text small">
 												BMW VIN. Sie ist in voller Länge anzugeben.
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
+										<label for="i3captcha_token" class="col-md-4 col-form-label">Captcha-Token</label>
+										<div class="col">
+											<input class="form-control" type="text" name="i3captcha_token" id="i3captcha_token" value="<?php echo $i3captcha_tokenold ?>">
+											<span class="form-text small">
+												Zum erstmaligen Login z.B. nach einem Neustart ist ein <b>aktuelles Captcha-Token</b> notwendig.<br>
+												Dazu bitte folgende Schritte durchführen:<br>
+												1. in einem neuen Browser-Tab auf diese Seite gehen:<br>
+											</span>
+											<a target="_blank" rel="noopener noreferrer" href="https://bimmer-connected.readthedocs.io/en/stable/captcha/rest_of_world.html">Captcha Page</a>
+											<span class="form-text small">
+												(https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html)<br>
+												2. Dort falls angefragt das Captcha lösen und/oder "Ich bin ein Mensch" und dann Submit anclicken.<br>
+												Als Ergebnis wird ein sehr langer String angezeigt. <br>
+												3. Diesen String komplett mit <b>Copy&Paste</b> in das Feld Captcha-Token eingeben.<br>
+												4. Die Konfiguration speichern.<br>
+												5. <b>Fertig.</b> Ab jetzt wird das sog. Refresh-Token verwendet.<br>
+												Das erneute Abrufen des Captcha-Token sollte nur notwendig werden wenn die Datei mit dem Refresh-Token verloren wird, z.B. nach SD-Kartentausch.<br>
+												<b>Achtung: Das Captcha-Token kann nur einmal verwendet werden und gilt nur kurze Zeit!</b>
 											</span>
 										</div>
 									</div>
@@ -2372,7 +2404,7 @@
 							hideSection('#socmaudi');
 							hideSection('#socmid');
 							hideSection('#socmvwid');
-							hideSection('#socmsmarteq');
+							hideSection('#socmovms');
 							hideSection('#socvag');
 							hideSection('#socevcc');
 							hideSection('#socmqtt');
@@ -2407,10 +2439,10 @@
 								showSection('#socsupportinfo');
 								showSection('#socmvwid');
 							}
-							if($('#socmodul').val() == 'soc_smarteq') {
-								$('#socsuportlink').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=6222')
+							if($('#socmodul').val() == 'soc_ovms') {
+								$('#socsuportlink').attr('href', 'https://forum.openwb.de/viewtopic.php?t=9278')
 								showSection('#socsupportinfo');
-								showSection('#socmsmarteq');
+								showSection('#socmovms');
 							}
 							if($('#socmodul').val() == 'soc_vag') {
 								showSection('#socoldevccwarning');
@@ -3086,7 +3118,7 @@
 										<option <?php if($socmodul1old == "soc_leafs1") echo "selected" ?> value="soc_leafs1">Nissan</option>
 										<option <?php if($socmodul1old == "soc_psalp2") echo "selected" ?> value="soc_psalp2">PSA (Peugeot/Citroen/DS/Opel/Vauxhall)</option>
 										<option <?php if($socmodul1old == "soc_zoelp2") echo "selected" ?> value="soc_zoelp2">Renault Zoe alt</option>
-										<option <?php if($socmodul1old == "soc_smarteqlp2") echo "selected" ?> value="soc_smarteqlp2">Smart EQ</option>
+										<option <?php if($socmodul1old == "soc_ovmslp2") echo "selected" ?> value="soc_ovmslp2">OVMS</option>
 										<option <?php if($socmodul1old == "soc_teslalp2") echo "selected" ?> value="soc_teslalp2">Tesla</option>
 										<option <?php if($socmodul1old == "soc_vaglp2") echo "selected" ?> value="soc_vaglp2">VAG</option>
 										<option <?php if($socmodul1old == "soc_volvolp2") echo "selected" ?> value="soc_volvolp2">Volvo</option>
@@ -3137,9 +3169,9 @@
 								- We Connect (ID) Account aktiv<br>
 								- We Connect ID App eingerichtet - auch für nicht-ID!<br>
 							</div>
-							<div id="socmsmarteqinfolp2" class="mt-1 alert alert-info hide">
-								Für smart EQ Fahrzeuge. Es wird benötigt:<br>
-								- smart Control Account aktiv<br>
+							<div id="socmovmsinfolp2" class="mt-1 alert alert-info hide">
+								Für Fahrzeuge mit OVMS Modul. Es wird benötigt:<br>
+								- OVMS Account in z.B. dexters-web.de<br>
 							</div>
 							<div id="socmuser2" class="hide">
 								<div class="form-group">
@@ -3550,6 +3582,28 @@
 										</div>
 									</div>
 									<div class="form-row mb-1">
+										<label for="i3captcha_tokens1" class="col-md-4 col-form-label">Captcha-Token</label>
+										<div class="col">
+											<input class="form-control" type="text" name="i3captcha_tokens1" id="i3captcha_tokens1" value="<?php echo $i3captcha_tokens1old ?>">
+											<span class="form-text small">
+												Zum erstmaligen Login z.B. nach einem Neustart ist ein <b>aktuelles Captcha-Token</b> notwendig.<br>
+												Dazu bitte folgende Schritte durchführen:<br>
+												1. in einem neuen Browser-Tab auf diese Seite gehen:<br>
+											</span>
+											<a target="_blank" rel="noopener noreferrer" href="https://bimmer-connected.readthedocs.io/en/stable/captcha/rest_of_world.html">Captcha Page</a>
+											<span class="form-text small">
+												(https://bimmer-connected.readthedocs.io/en/latest/captcha/rest_of_world.html)<br>
+												2. Dort falls angefragt das Captcha lösen und/oder "Ich bin ein Mensch" und dann Submit anclicken.<br>
+												Als Ergebnis wird ein sehr langer String angezeigt. <br>
+												3. Diesen String komplett mit <b>Copy&Paste</b> in das Feld Captcha-Token eingeben.<br>
+												4. Die Konfiguration speichern.<br>
+												5. <b>Fertig.</b> Ab jetzt wird das sog. Refresh-Token verwendet.<br>
+												Das erneute Abrufen des Captcha-Token sollte nur notwendig werden wenn die Datei mit dem Refresh-Token verloren wird, z.B. nach SD-Kartentausch.<br>
+												<b>Achtung: Das Captcha-Token kann nur einmal verwendet werden und gilt nur kurze Zeit!</b>
+											</span>
+										</div>
+									</div>
+									<div class="form-row mb-1">
 										<label for="soci3intervall1" class="col-md-4 col-form-label">Abfrageintervall</label>
 										<div class="col">
 											<input class="form-control" type="text" name="soci3intervall1" id="soci3intervall1" value="<?php echo $soci3intervall1old ?>">
@@ -3626,7 +3680,35 @@
 										<div class="col">
 											<input class="form-control" type="password" name="soc2pin" id="soc2pin" value="<?php echo $soc2pinold ?>">
 											<span class="form-text small">
-												PIN des Accounts.
+												PIN des Accounts.<br>
+												Bei Smart EQ kommt die PIN (OTP Code) via Email.<br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmserver2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2server" class="col-md-4 col-form-label">Server URL</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2server" id="soc2server" value="<?php echo $soc2serverold ?>">
+											<span class="form-text small">
+												URL des OVMS Servers incl. Port.<br>
+												z.B. https://ovms.dexters-web.de:6869<br>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div id="socmvehicleid2" class="hide">
+								<div class="form-group">
+									<div class="form-row mb-1">
+										<label for="soc2vehicleid" class="col-md-4 col-form-label">Vehicle Id</label>
+										<div class="col">
+											<input class="form-control" type="text" name="soc2vehicleid" id="soc2vehicleid" value="<?php echo $soc2vehicleidold ?>">
+											<span class="form-text small">
+												OVMS vehicleId des Fahrzeugs.
 											</span>
 										</div>
 									</div>
@@ -4378,6 +4460,7 @@
 							hideSection('#socmodullp2');
 							hideSection('#socmqtt1');
 							hideSection('#socmtype2');
+							hideSection('#socmserver2');
 							hideSection('#socmuser2');
 							hideSection('#socmpass2');
 							hideSection('#socmpin2');
@@ -4394,6 +4477,7 @@
 							hideSection('#socmzeronglp2');
 							hideSection('#socpsalp2');
 							hideSection('#socmvin2');
+							hideSection('#socmvehicleid2');
 							hideSection('#socmintervall2');
 							hideSection('#socmintervallladen2');
 							hideSection('#socmanuallp2');
@@ -4402,7 +4486,7 @@
 							hideSection('#socmkialp2');
 							hideSection('#socoldevccwarninglp2');
 							hideSection('#socmvwidinfolp2');
-							hideSection('#socmsmarteqinfolp2');
+							hideSection('#socmovmsinfolp2');
 							hideSection('#socsupportinfolp2');
 							hideSection('#socnosupportinfolp2');
 
@@ -4452,13 +4536,14 @@
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
 							}
-							if($('#socmodul1').val() == 'soc_smarteqlp2') {
-								$('#socsuportlinklp2').attr('href', 'https://openwb.de/forum/viewtopic.php?f=12&t=6222')
+							if($('#socmodul1').val() == 'soc_ovmslp2') {
+								$('#socsuportlinklp2').attr('href', 'https://forum.openwb.de/viewtopic.php?t=9278')
 								showSection('#socsupportinfolp2');
-								showSection('#socmsmarteqinfolp2');
+								showSection('#socmovmsinfolp2');
+								showSection('#socmserver2');
 								showSection('#socmuser2');
 								showSection('#socmpass2');
-								showSection('#socmvin2');
+								showSection('#socmvehicleid2');
 								showSection('#socmintervall2');
 								showSection('#socmintervallladen2');
 							}

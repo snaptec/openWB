@@ -66,6 +66,15 @@
 	// prepare key/value array
 	$settingsArray = [];
 
+	function checkModule($module){
+		$modulePath = $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/";
+		$path = realpath($modulePath . $module);
+		if ($path === false || strpos($path, $modulePath) !== 0) {
+			return false;
+		}
+		return basename($path);
+	}
+
 	try {
 		if ( !file_exists($myConfigFile) ) {
 			throw new Exception('Konfigurationsdatei nicht gefunden.');
@@ -98,6 +107,81 @@
 			}
 		}
 
+		// handling of different actions required by some modules
+
+		// update display process if in POST data
+		if( array_key_exists( 'displayaktiv', $_POST ) || array_key_exists( 'isss', $_POST) ){ ?>
+			<script>$('#feedbackdiv').append("<br>Displays werden neu geladen.");</script>
+			<?php
+			exec( 'mosquitto_pub -t openWB/system/reloadDisplay -m "1"' );
+			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/execdisplay', "1");
+		}
+
+		// start etprovider update if in POST data
+		if( array_key_exists( 'etprovideraktiv', $_POST ) && ($_POST['etprovideraktiv'] == 1) ){
+			$module = checkModule($_POST['etprovider']);
+			if( $module === false ){
+				throw new Exception('Ungültiger ET-Provider: ' . $_POST['etprovider']);
+			}?>
+			<script>$('#feedbackdiv').append("<br>Update des Stromtarifanbieters gestartet.");</script>
+			<?php
+			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($module) . "/main.sh >> /var/log/openWB.log 2>&1 &" );
+			exec( 'mosquitto_pub -t openWB/global/ETProvider/modulePath -r -m ' . $module );
+		}
+
+		// soc module for lp1
+		if( array_key_exists( 'socmodul', $_POST ) ){
+			// check for manual soc module on lp1
+			if( $_POST['socmodul'] == 'soc_manual' ){
+				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "1"' );
+			} else {
+				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "0"' );
+			}
+			// start soc update if in POST data
+			if( $_POST['socmodul'] != 'none' ){
+				$module = checkModule($_POST['socmodul']);
+				if( $module === false ){
+					throw new Exception('Ungültiges SoC-Modul: ' . $_POST['socmodul']);
+				}
+				?>
+				<script>$('#feedbackdiv').append("<br>Update SoC-Modul '<?php echo $module; ?>' an Ladepunkt 1 gestartet.");</script>
+				<?php
+				file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer', "20005");
+				exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($module) . "/main.sh 1 > /dev/null &" );
+			}
+		}
+
+		// soc module for lp2
+		if( array_key_exists( 'socmodul1', $_POST ) ){
+			// check for manual ev soc module on lp2
+			if( $_POST['socmodul1'] == 'soc_manuallp2' ){
+				exec( 'mosquitto_pub -t openWB/lp/2/boolSocManual -r -m "1"' );
+			} else {
+				exec( 'mosquitto_pub -t openWB/lp/2/boolSocManual -r -m "0"' );
+			}
+			if( $_POST['socmodul1'] != 'none' ){
+				// detect trailing "s1" or "lp2" in $POST['socmodul1']
+				$moduleName = preg_replace('/(s1|lp2)$/', '', $_POST['socmodul1']);
+	
+				$module = checkModule($moduleName);
+				if( $module === false ){
+					throw new Exception('Ungültiges SoC-Modul: ' . $_POST['socmodul1']);
+				}
+				?>
+				<script>$('#feedbackdiv').append("<br>Update SoC-Modul '<?php echo $moduleName; ?>' an Ladepunkt 2 gestartet.");</script>
+				<?php
+				file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer1', "20005");
+				exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . escapeshellcmd($module) . "/main.sh 2 > /dev/null &" );
+			}
+		}
+
+		// check for rfid mode and start/stop handler
+		if( array_key_exists( 'rfidakt', $_POST ) ){ ?>
+			<script>$('#feedbackdiv').append("<br>RFID Konfiguration wird aktualisiert.");</script>
+			<?php
+			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/runs/rfid/rfidSetup.sh >> /var/log/openWB.log 2>&1 &" );
+		}
+
 		// write config to file
 		$fp = fopen($myConfigFile, "w");
 		if ( !$fp ) {
@@ -110,62 +194,6 @@
 			}
 		}
 		fclose($fp);
-
-		// handling of different actions required by some modules
-
-		// check for manual ev soc module on lp1
-		if( array_key_exists( 'socmodul', $_POST ) ){
-			if( $_POST['socmodul'] == 'soc_manual' ){
-				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "1"' );
-			} else {
-				exec( 'mosquitto_pub -t openWB/lp/1/boolSocManual -r -m "0"' );
-			}
-		}
-		// check for manual ev soc module on lp2
-		if( array_key_exists( 'socmodul1', $_POST ) ){
-			if( $_POST['socmodul1'] == 'soc_manuallp2' ){
-				exec( 'mosquitto_pub -t openWB/lp/2/boolSocManual -r -m "1"' );
-			} else {
-				exec( 'mosquitto_pub -t openWB/lp/2/boolSocManual -r -m "0"' );
-			}
-		}
-
-		// update display process if in POST data
-		if( array_key_exists( 'displayaktiv', $_POST ) || array_key_exists( 'isss', $_POST) ){ ?>
-			<script>$('#feedbackdiv').append("<br>Displays werden neu geladen.");</script>
-			<?php
-			exec( 'mosquitto_pub -t openWB/system/reloadDisplay -m "1"' );
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/execdisplay', "1");
-		}
-
-		// start etprovider update if in POST data
-		if( array_key_exists( 'etprovideraktiv', $_POST ) && ($_POST['etprovideraktiv'] == 1) ){ ?>
-			<script>$('#feedbackdiv').append("<br>Update des Stromtarifanbieters gestartet.");</script>
-			<?php
-			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . $_POST['etprovider'] . "/main.sh >> /var/log/openWB.log 2>&1 &" );
-			exec( 'mosquitto_pub -t openWB/global/ETProvider/modulePath -r -m "' . $_POST['etprovider'] . '"' );
-		}
-
-		// start ev-soc updates if in POST data
-		if( array_key_exists( 'socmodul', $_POST ) && ($_POST['socmodul'] != 'none') ){ ?>
-			<script>$('#feedbackdiv').append("<br>Update SoC-Modul an Ladepunkt 1 gestartet.");</script>
-			<?php
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer', "20005");
-			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . $_POST['socmodul'] . "/main.sh > /dev/null &" );
-		}
-		if( array_key_exists( 'socmodul1', $_POST ) && ($_POST['socmodul1'] != 'none') ){ ?>
-			<script>$('#feedbackdiv').append("<br>Update SoC-Modul an Ladepunkt 2 gestartet.");</script>
-			<?php
-			file_put_contents($_SERVER['DOCUMENT_ROOT'].'/openWB/ramdisk/soctimer1', "20005");
-			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/modules/" . $_POST['socmodul1'] . "/main.sh > /dev/null &" );
-		}
-
-		// check for rfid mode and start/stop handler
-		if( array_key_exists( 'rfidakt', $_POST ) ){ ?>
-			<script>$('#feedbackdiv').append("<br>RFID Konfiguration wird aktualisiert.");</script>
-			<?php
-			exec( $_SERVER['DOCUMENT_ROOT'] . "/openWB/runs/rfid/rfidSetup.sh >> /var/log/openWB.log 2>&1 &" );
-		}
 
 	} catch ( Exception $e ) {
 		$msg = $e->getMessage();
