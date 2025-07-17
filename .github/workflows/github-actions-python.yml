@@ -23,6 +23,7 @@ jobs:
         uses: TrueBrain/actions-flake8@v2.1
         with:
           path: packages
+          flake8_version: 5.0.4
       - name: Test with pytest
         run: |
           PYTHONPATH=packages python -m pytest packages modules
