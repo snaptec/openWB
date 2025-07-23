@@ -148,3 +148,24 @@ done
 # monthly . csv updaten
 echo "Trigger update of logfiles..."
 python3 /var/www/html/openWB/runs/csvcalc.py --input /var/www/html/openWB/web/logging/data/daily/ --output /var/www/html/openWB/web/logging/data/v001/ --partial /var/www/html/openWB/ramdisk/ --mode A >> /var/www/html/openWB/ramdisk/csvcalc.log 2>&1 &
+
+#check if backup is configured - if yes, let's go
+if [[ $nightlybackup == 1 ]]; then
+	echo "Nightly backup turned on. Performing backup."
+	port=$WEB_PORT
+	if [[ -z "$port" ]]; then
+		port=80
+	fi
+
+	if (( $shortbackupfilename == 0)); then
+		shortbackupfilename=1
+	else
+		shortbackupfilename=0
+	fi
+
+	url="http://127.0.0.1:$port/openWB/web/settings/savebackup.php?extendedFilename=$shortbackupfilename"
+	echo "Using url $url"
+	curl -s -o /dev/null $url
+else
+	echo "Nightly backup turned off. Doing nothing."
+fi
