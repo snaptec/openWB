@@ -348,6 +348,15 @@
 							<div class="form-group mb-1">
 								<div class="form-row">
 									<div class="col">
+										<input type="hidden" name="unlockscreenrfid" value="0" />
+										<input type="checkbox" name="unlockscreenrfid" id="unlockscreenrfid" value="1" <?php if ($unlockscreenrfidold == 1) { echo "checked"; } ?>> Display entsperren wenn Auto zugwiesen. Display sperrt sich automatisch nach der eingestellten Zeit.
+									</div>
+								</div>
+							</div>
+							<hr class="border-secondary">
+							<div class="form-group mb-1">
+								<div class="form-row">
+									<div class="col">
 										Autos zuweisen
 									</div>
 								</div>
@@ -770,6 +779,16 @@
 							<div class="alert alert-info">
 								Im Modus 2 wird eine Kommaseparierte Liste mit gültigen RFID Tags hinterlegt. Gescannt werden kann an jedem möglichen RFID Leser. Heißt auch bei mehreren Ladepunkten kann an einem zentralen RFID Leser gescannt werden. Der gescannte Tag wird dem zuletzt angeschlossenenen Auto zugewiesen, schaltet den Ladepunkt frei und vermerkt dies für das Ladelog. Wird erst gescannt und dann ein Auto angeschlossen wird der Tag dem Auto zugewiesen das als nächstes ansteckt. Wird 5 Minuten nach Scannen kein Auto angeschlossen wird der Tag verworfen. Jeder Ladepunkt wird nach abstecken automatisch wieder gesperrt.
 							</div>
+							
+							<div class="form-group mb-1">
+								<div class="form-row">
+									<div class="col">
+										<input type="hidden" name="unlockscreenrfid" value="0" />
+										<input type="checkbox" name="unlockscreenrfid" id="unlockscreenrfid" value="1" <?php if ($unlockscreenrfidold == 1) { echo "checked"; } ?>> Display entsperren wenn Auto zugwiesen. Display sperrt sich automatisch nach der eingestellten Zeit.
+									</div>
+								</div>
+							</div>
+							<hr class="border-secondary">
 							<div class="form-group mb-1">
 								<div class="form-row">
 									<div class="col">

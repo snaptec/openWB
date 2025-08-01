@@ -19,3 +19,4 @@ modules/soc_vwid/secrets.py
 __pycache__
 openwb.conf.*
 web/backup/*.tar.gz
+sed*
